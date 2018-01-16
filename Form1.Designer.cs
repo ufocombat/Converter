@@ -1,4 +1,4 @@
-﻿namespace KRSP
+﻿namespace Converter
 {
     partial class Form1
     {
@@ -28,12 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.modeFile = new System.Windows.Forms.ToolStripMenuItem();
             this.OpenKRSP = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.закрытьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.настройкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.форма713ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.ExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -43,7 +45,6 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolFileName = new System.Windows.Forms.ToolStripStatusLabel();
             this.rt = new System.Windows.Forms.TextBox();
-            this.форма713ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -100,6 +101,13 @@
             this.настройкаToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
             this.настройкаToolStripMenuItem.Text = "Настройка";
             // 
+            // форма713ToolStripMenuItem
+            // 
+            this.форма713ToolStripMenuItem.Name = "форма713ToolStripMenuItem";
+            this.форма713ToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.форма713ToolStripMenuItem.Text = "Форма 713";
+            this.форма713ToolStripMenuItem.Click += new System.EventHandler(this.форма713ToolStripMenuItem_Click);
+            // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
@@ -133,13 +141,14 @@
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(297, 6);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(307, 6);
             // 
             // инструкцияToolStripMenuItem
             // 
             this.инструкцияToolStripMenuItem.Name = "инструкцияToolStripMenuItem";
-            this.инструкцияToolStripMenuItem.Size = new System.Drawing.Size(300, 22);
+            this.инструкцияToolStripMenuItem.Size = new System.Drawing.Size(310, 22);
             this.инструкцияToolStripMenuItem.Text = "Инструкция";
+            this.инструкцияToolStripMenuItem.Click += new System.EventHandler(this.инструкцияToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -170,13 +179,6 @@
             this.rt.Size = new System.Drawing.Size(588, 391);
             this.rt.TabIndex = 2;
             // 
-            // форма713ToolStripMenuItem
-            // 
-            this.форма713ToolStripMenuItem.Name = "форма713ToolStripMenuItem";
-            this.форма713ToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
-            this.форма713ToolStripMenuItem.Text = "Форма 713";
-            this.форма713ToolStripMenuItem.Click += new System.EventHandler(this.форма713ToolStripMenuItem_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -185,6 +187,7 @@
             this.Controls.Add(this.rt);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Конвертер отчетности СКР - RnDSoft";

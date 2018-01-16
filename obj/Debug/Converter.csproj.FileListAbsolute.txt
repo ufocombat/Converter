@@ -5,11 +5,14 @@ C:\Users\rnds\Documents\Visual Studio 2017\Projects\Converter\Converter\bin\Debu
 C:\Users\rnds\Documents\Visual Studio 2017\Projects\Converter\Converter\bin\Debug\ExcelDataReader.dll
 C:\Users\rnds\Documents\Visual Studio 2017\Projects\Converter\Converter\bin\Debug\ExcelDataReader.xml
 C:\Users\rnds\Documents\Visual Studio 2017\Projects\Converter\Converter\bin\Debug\ExcelDataReader.DataSet.xml
-C:\Users\rnds\Documents\Visual Studio 2017\Projects\Converter\Converter\obj\Debug\KRSP.Form1.resources
-C:\Users\rnds\Documents\Visual Studio 2017\Projects\Converter\Converter\obj\Debug\KRSP.Form2.resources
-C:\Users\rnds\Documents\Visual Studio 2017\Projects\Converter\Converter\obj\Debug\KRSP.Properties.Resources.resources
 C:\Users\rnds\Documents\Visual Studio 2017\Projects\Converter\Converter\obj\Debug\Converter.csproj.GenerateResource.Cache
 C:\Users\rnds\Documents\Visual Studio 2017\Projects\Converter\Converter\obj\Debug\Converter.csproj.CoreCompileInputs.cache
 C:\Users\rnds\Documents\Visual Studio 2017\Projects\Converter\Converter\obj\Debug\KRSP.exe
 C:\Users\rnds\Documents\Visual Studio 2017\Projects\Converter\Converter\obj\Debug\KRSP.pdb
 C:\Users\rnds\Documents\Visual Studio 2017\Projects\Converter\Converter\obj\Debug\Converter.csprojResolveAssemblyReference.cache
+C:\Users\rnds\Documents\Visual Studio 2017\Projects\Converter\Converter\obj\Debug\Converter.Form1.resources
+C:\Users\rnds\Documents\Visual Studio 2017\Projects\Converter\Converter\obj\Debug\Converter.Form2.resources
+C:\Users\rnds\Documents\Visual Studio 2017\Projects\Converter\Converter\obj\Debug\Converter.Properties.Resources.resources
+C:\Users\rnds\Documents\Visual Studio 2017\Projects\Converter\Converter\bin\Debug\Newtonsoft.Json.dll
+C:\Users\rnds\Documents\Visual Studio 2017\Projects\Converter\Converter\bin\Debug\Newtonsoft.Json.xml
+C:\Users\rnds\Documents\Visual Studio 2017\Projects\Converter\Converter\obj\Debug\Converter.Form3.resources

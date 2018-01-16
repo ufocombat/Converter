@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Converter
 {
-    public partial class Form2 : Form
+    public partial class Form3 : Form
     {
-        public Form2()
+        public Form3()
         {
             InitializeComponent();
         }
@@ -21,6 +21,5 @@ namespace Converter
         {
             Close();
         }
-
     }
 }

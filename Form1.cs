@@ -11,24 +11,29 @@ using System.Windows.Forms;
 using System.IO;
 using ExcelDataReader;
 using Excel = Microsoft.Office.Interop.Excel;//https://docs.microsoft.com/ru-ru/dotnet/csharp/programming-guide/interop/how-to-access-office-onterop-objects
+using Newtonsoft.Json;//https://stackoverflow.com/questions/4749639/deserializing-json-to-net-object-using-newtonsoft-or-linq-to-json-maybe
 
-namespace KRSP
+namespace Converter
 {
     public partial class Form1 : Form
     {
+        Setup setup;
         List<Item> items = new List<Item>();
+        List<Column> columns = new List<Column>();
         StringBuilder r = new StringBuilder();
         String ExcelFimeName = String.Empty;
 
         static String DirForms = Application.StartupPath + @"\Формы";
         static String DirReports = Application.StartupPath + @"\Отчеты";
+        static String SetupFileName = Application.StartupPath + @"\setup.json";
+        static String ConfigFileName = Application.StartupPath + @"\config.json";
 
         DataTable dt;
 
         private static String Normal(int value)
         {
             String work = value.ToString();
-            while (work.Length < 4) work = "0" + work;
+            while (work.Length < 3) work = "0" + work;
             return work;
         }
 
@@ -48,6 +53,39 @@ namespace KRSP
             Directory.CreateDirectory(DirReports);
 
             Start();
+
+            if (File.Exists(SetupFileName))
+                try
+                {
+                    setup = JsonConvert.DeserializeObject<Setup>(File.ReadAllText(SetupFileName));
+                }
+                catch
+                {
+                    rt.Text = "Поврежден файл настройки.";
+                }
+
+            if (setup == null)
+            {
+                setup = new Setup();
+                File.WriteAllText(SetupFileName, JsonConvert.SerializeObject(setup, Formatting.Indented));
+            }
+
+            if (File.Exists(ConfigFileName))
+                try
+                {
+                    columns = JsonConvert.DeserializeObject<List<Column>>(File.ReadAllText(ConfigFileName));
+                }
+                catch
+                {
+                    rt.Text = "Поврежден файл конфигурации. ";
+                }
+
+            if (columns.Count == 0)
+            {
+                columns.Add(new Column("Статья УК", 9) { Key = true });
+                columns.Add(new Column("Присоеденино", 10));
+                File.WriteAllText(ConfigFileName, JsonConvert.SerializeObject(columns, Formatting.Indented));
+            }
         }
 
         private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -219,8 +257,13 @@ namespace KRSP
         }
         private void OpenForm713()
         {
-            r.Clear();
+
+            r.AppendLine(String.Empty);
             r.AppendLine("Заполнение формы 713");
+            r.AppendLine("Не закрывайте программу до окончания выгрузки (100%)");
+            rt.Text = r.ToString();
+            Application.DoEvents();
+
             String ExcelFileName;
             int i = 1;
 
@@ -238,9 +281,9 @@ namespace KRSP
             Excel._Worksheet workSheet = (Excel.Worksheet)excelApp.ActiveSheet;
 
 
-            for (int row = 9; row < 198; row++)
+            for (int row = setup.FromLine713; row <= setup.ToLine713; row++)
             {
-                toolFileName.Text = String.Format("{0}%", (int)row * 100 / 198);
+                toolFileName.Text = String.Format("{0}%", (int) row * 100 / setup.ToLine713);
                 Application.DoEvents();
 
                 try
@@ -249,19 +292,19 @@ namespace KRSP
                     {
                         String[] elements = Regex.Split(workSheet.Cells[row, "H"].Value.ToString(), @";\s*");
                         foreach (var element in elements)
-                        foreach (Item item in items)
-                        {
-                            
-                            if (element.IndexOf(item.id)>=0  )
+                            foreach (Item item in items)
                             {
-                                try
+
+                                if (element.IndexOf(item.id) >= 0)
                                 {
-                                    var oRange = (Excel.Range)workSheet.Cells[row, 8];
-                                    oRange.Interior.Color = System.Drawing.Color.LightGreen;
-                                }
-                                catch
-                                {
-                                }
+                                    try
+                                    {
+                                        var oRange = (Excel.Range)workSheet.Cells[row, 8];
+                                        oRange.Interior.Color = System.Drawing.Color.LightGreen;
+                                    }
+                                    catch
+                                    {
+                                    }
 
                                     for (int j = 0; j < 12; j++)
                                     {
@@ -284,12 +327,12 @@ namespace KRSP
                                         workSheet.Cells[row, 20].Value = item.c[12];*/
                                     }
 
-                                //  r.AppendLine(String.Format("Статья {0} внесена в отчет", item.id));
+                                    //  r.AppendLine(String.Format("Статья {0} внесена в отчет", item.id));
 
-                                items.Remove(item);
-                                break;
+                                    items.Remove(item);
+                                    break;
+                                }
                             }
-                        }
                     }
                 }
                 catch
@@ -301,6 +344,7 @@ namespace KRSP
                 }
             }
 
+            r.AppendLine("Заполнение завершено.");
             if (items.Count > 0)
             {
                 r.AppendLine(String.Empty);
@@ -312,16 +356,12 @@ namespace KRSP
                 }
             }
             toolFileName.Text = String.Empty;
-            r.AppendLine("Заполнение завершено");
             rt.Text = r.ToString();
         }
         private void оПрограммеToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form2 f = new Form2();
             f.ShowDialog(this);
-        }
-        private void toolStripMenuItem7_Click(object sender, EventArgs e)
-        {
         }
         private void закрытьToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -333,6 +373,12 @@ namespace KRSP
             var excelApp = new Excel.Application();
             excelApp.Visible = true;
             excelApp.Workbooks.Open(DirForms + @"\713.xlsx");
+        }
+
+        private void инструкцияToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form3 f = new Form3();
+            f.ShowDialog(this);
         }
     }
 }
