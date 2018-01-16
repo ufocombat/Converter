@@ -72,6 +72,7 @@
             this.Controls.Add(this.button1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Form2";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "О программе \"Конвертер отчетности СКР\" - RnDSoft";
             this.ResumeLayout(false);
 

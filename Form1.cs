@@ -98,67 +98,38 @@ namespace Converter
             int lines = 0;
             int i = 0;
 
-            using (StreamWriter writer = new StreamWriter(Application.StartupPath + @"\log.txt", false, Encoding.UTF8))
+            for (i = 4; i < dt.Rows.Count; i++)
             {
-                for (i = 4; i < dt.Rows.Count; i++)
+                var item = new Item()
                 {
-                    var item = new Item()
+                    id = dt.Rows[i][5].ToString(),
+                   // Solution = dt.Rows[i][15].ToString(),
+                    Issue = dt.Rows[i][17].ToString(),
+                    Outgo = dt.Rows[i][14].ToString(),
+                    OutgoT = dt.Rows[i][18].ToString()
+                };
+
+                item.dataRow = dt.Rows[i];
+
+                for (int n=1;n<13;n++) if (item.Is(n)) item.c[n]++;
+
+                var f = false;
+                lines++;
+
+
+                foreach (Item ii in items)
+                {
+                    f = ii.id == item.id;
+                    if (f)
                     {
-                        id = dt.Rows[i][5].ToString(),
-                        Solution = dt.Rows[i][15].ToString(),
-                        Issue = dt.Rows[i][17].ToString(),
-                        Outgo = dt.Rows[i][14].ToString(),
-                        OutgoT = dt.Rows[i][18].ToString()
-                    };
-
-                    var f = false;
-                    lines++;
-
-                    writer.WriteLine(String.Format("Статья {0}; Решение {1};",
-                        item.id,
-                        item.Solution));
-
-                    foreach (Item ii in items)
-                    {
-                        f = ii.id == item.id;
-                        if (f)
-                        {
-                            ii.Count++;
-                            if (item.Is2()) ii.c[1]++;
-                            if (item.Is3()) ii.c[2]++;
-                            if (item.Is4()) ii.c[3]++;
-                            if (item.Is5()) ii.c[4]++;
-                            if (item.Is6()) ii.c[5]++;
-                            if (item.Is7()) ii.c[6]++;
-                            if (item.Is8()) ii.c[7]++;
-                            if (item.Is9()) ii.c[8]++;
-                            if (item.Is10()) ii.c[9]++;
-                            if (item.Is11()) ii.c[10]++;
-                            if (item.Is12()) ii.c[11]++;
-                            if (item.Is13()) ii.c[12]++;
-
-                            break;
-                        }
-                    }
-
-                    if (!f)
-                    {
-                        //item.trace = String.Format("{0}, ", i + 1);
-                        if (item.Is2()) item.c[1]++;
-                        if (item.Is3()) item.c[2]++;
-                        if (item.Is4()) item.c[3]++;
-                        if (item.Is5()) item.c[4]++;
-                        if (item.Is6()) item.c[5]++;
-                        if (item.Is7()) item.c[6]++;
-                        if (item.Is8()) item.c[7]++;
-                        if (item.Is9()) item.c[8]++;
-                        if (item.Is10()) item.c[9]++;
-                        if (item.Is11()) item.c[10]++;
-                        if (item.Is12()) item.c[11]++;
-                        if (item.Is13()) item.c[12]++;
-                        items.Add(item);
+                        for (int n = 0; n < 13; n++) ii.c[n] = ii.c[n] + item.c[n];
+                        break;
                     }
                 }
+
+                if (!f) items.Add(item);
+
+
             }
 
             r.AppendLine(String.Format("Обработано {0}  строк", lines));
@@ -214,7 +185,7 @@ namespace Converter
                             {
                                 writer.WriteLine(String.Format("{0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10};{11};{12};{13}",
                                     ii.id,
-                                    ii.Count,
+                                    ii.c[0],
                                     ii.c[1],
                                     ii.c[2],
                                     ii.c[3],
@@ -283,7 +254,7 @@ namespace Converter
 
             for (int row = setup.FromLine713; row <= setup.ToLine713; row++)
             {
-                toolFileName.Text = String.Format("{0}%", (int) row * 100 / setup.ToLine713);
+                toolFileName.Text = String.Format("{0}%", (int)row * 100 / setup.ToLine713);
                 Application.DoEvents();
 
                 try
