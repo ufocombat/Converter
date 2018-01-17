@@ -12,6 +12,7 @@ using System.IO;
 using ExcelDataReader;
 using Excel = Microsoft.Office.Interop.Excel;//https://docs.microsoft.com/ru-ru/dotnet/csharp/programming-guide/interop/how-to-access-office-onterop-objects
 using Newtonsoft.Json;//https://stackoverflow.com/questions/4749639/deserializing-json-to-net-object-using-newtonsoft-or-linq-to-json-maybe
+using System.Diagnostics;
 
 namespace Converter
 {
@@ -52,23 +53,29 @@ namespace Converter
             Directory.CreateDirectory(DirForms);
             Directory.CreateDirectory(DirReports);
 
+            comDistrict.Items.Clear();
+            comDistrict.Items.Add("(все)");
+            comDistrict.Items.Add("м");
+            comDistrict.Items.Add("с");
+
             Start();
 
-            if (File.Exists(SetupFileName))
-                try
-                {
-                    setup = JsonConvert.DeserializeObject<Setup>(File.ReadAllText(SetupFileName));
-                }
-                catch
-                {
-                    rt.Text = "Поврежден файл настройки.";
-                }
+            try
+            {
+                setup = JsonConvert.DeserializeObject<Setup>(File.ReadAllText(SetupFileName));
+            }
+            catch
+            {
+                rt.Text = "Поврежден файл настройки.";
+            }
 
             if (setup == null)
             {
                 setup = new Setup();
                 File.WriteAllText(SetupFileName, JsonConvert.SerializeObject(setup, Formatting.Indented));
             }
+
+            comDistrict.Text = setup.District;
 
             if (File.Exists(ConfigFileName))
                 try
@@ -88,52 +95,62 @@ namespace Converter
             }
         }
 
-        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
 
         private void ReadBook()
         {
+            StreamWriter logFile = null;
+
+            if (setup.Trace != String.Empty)
+            {
+                logFile = new StreamWriter(Application.StartupPath + "\\log.txt", false, Encoding.UTF8);
+                logFile.WriteLine(String.Format("Трассировка статьи {0}", setup.Trace));
+            }
+
             int lines = 0;
             int i = 0;
 
-            for (i = 4; i < dt.Rows.Count; i++)
+            String distr = comDistrict.Text.ToLower();
+            Boolean all = "(все)" == distr;
+
+            for (i = setup.FromLineKRSP - 1; i < dt.Rows.Count; i++)
             {
-                var item = new Item()
+                if (all || (dt.Rows[i][2].ToString() == distr))
                 {
-                    id = dt.Rows[i][5].ToString(),
-                   // Solution = dt.Rows[i][15].ToString(),
-                    Issue = dt.Rows[i][17].ToString(),
-                    Outgo = dt.Rows[i][14].ToString(),
-                    OutgoT = dt.Rows[i][18].ToString()
-                };
+                    var item = new Item() { id = dt.Rows[i][5].ToString() };
 
-                item.dataRow = dt.Rows[i];
-
-                for (int n=1;n<13;n++) if (item.Is(n)) item.c[n]++;
-
-                var f = false;
-                lines++;
+                    item.dataRow = dt.Rows[i];
 
 
-                foreach (Item ii in items)
-                {
-                    f = ii.id == item.id;
-                    if (f)
+
+                    for (int n = 1; n < 13; n++) if (item.Is(n)) item.c[n]++;
+
+                    var f = false;
+                    lines++;
+
+
+                    foreach (Item ii in items)
                     {
-                        for (int n = 0; n < 13; n++) ii.c[n] = ii.c[n] + item.c[n];
-                        break;
+                        f = ii.id == item.id;
+                        if (f)
+                        {
+                            for (int n = 0; n < 13; n++) ii.c[n] = ii.c[n] + item.c[n];
+                            break;
+                        }
+                    }
+
+                    if (!f) items.Add(item);
+
+                    if ((logFile != null) && (item.id == setup.Trace))
+                    {
+                        logFile.Write(String.Format("СтрКниги[{0}],<{1}>;", Normal(i+1), dt.Rows[i][5].ToString()));
+                        if (item.c[1]>0) logFile.Write("Присоеденено;");
+                        logFile.WriteLine();
                     }
                 }
-
-                if (!f) items.Add(item);
-
-
             }
 
-            r.AppendLine(String.Format("Обработано {0}  строк", lines));
-            r.AppendLine(String.Format("Последняя строка {0}", i));
+            r.AppendLine(String.Format("Обработано {0} строк", lines));
+            if (logFile != null) logFile.Close();
         }
 
         private void OpenKRSP_Click(object sender, EventArgs e)
@@ -150,12 +167,24 @@ namespace Converter
                     {
                         r.Clear();
                         r.AppendLine("Открыт файл: " + of.FileName);
+                        r.AppendLine("Район: " + comDistrict.Text);
 
                         items.Clear();
 
                         ExcelFimeName = of.FileName;
+                        FileStream stream;
 
-                        FileStream stream = File.Open(ExcelFimeName, FileMode.Open, FileAccess.Read);
+                        try
+                        {
+                            stream = File.Open(ExcelFimeName, FileMode.Open, FileAccess.Read);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Не удалось открыть указанный файл. Если файл открыт в другой программе закроете его и повторите операцию.");
+                            modeFile.Enabled = false;
+                            return;
+                        }
+
                         IExcelDataReader excelReader;
 
                         var file = new FileInfo(ExcelFimeName);
@@ -164,7 +193,7 @@ namespace Converter
                         else if (file.Extension.Equals(".xlsx"))
                             excelReader = ExcelDataReader.ExcelReaderFactory.CreateOpenXmlReader(stream);
                         else
-                            throw new Exception("Данный формат файла не поддерживается. Обратитесь к разработчику.");
+                            throw new Exception("Данный формат файла не поддерживается.");
 
                         DataSet result = excelReader.AsDataSet();
                         //excelReader.IsFirstRowAsColumnNames = true;
@@ -181,24 +210,11 @@ namespace Converter
                         {
                             writer.WriteLine("Статья УК;Количество;Присоедено (16=СЕ);Возбуждено (16=УД);Отказано (16=отказано);По пп 1, 2 ч. ст 24 (18=1|2);По пп 3 ч. ст 24 (18=3);По пп 4 ч. ст 24 (18=4);Передано в суд (16=под-ти|пор-ти);16=по под-ти;16=по пор-ти;Выезд (15=15|да|в др. суб.);Выезд 3-10 сут (19= <=10);Выезд больше 10 сут (19= >10)");
 
-                            foreach (Item ii in items)
+                            foreach (Item itemm in items)
                             {
-                                writer.WriteLine(String.Format("{0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10};{11};{12};{13}",
-                                    ii.id,
-                                    ii.c[0],
-                                    ii.c[1],
-                                    ii.c[2],
-                                    ii.c[3],
-                                    ii.c[4],
-                                    ii.c[5],
-                                    ii.c[6],
-                                    ii.c[7],
-                                    ii.c[8],
-                                    ii.c[9],
-                                    ii.c[10],
-                                    ii.c[11],
-                                    ii.c[12]
-                                   ));
+                                writer.Write(String.Format("{0};", itemm.id));
+                                for (int j = 0; j < 13; j++) writer.Write(String.Format("{0};", itemm.c[j]));
+                                writer.WriteLine();
                             }
                         }
 
@@ -277,28 +293,14 @@ namespace Converter
                                     {
                                     }
 
-                                    for (int j = 0; j < 12; j++)
+                                    for (int j = 0; j < 13; j++)
                                     {
                                         int jj = j + 9;
                                         if (workSheet.Cells[row, jj].Value2 == null)
                                             workSheet.Cells[row, jj].Value = item.c[j];
                                         else
                                             workSheet.Cells[row, jj].Value = workSheet.Cells[row, jj].Value + item.c[j];
-
-                                        /*workSheet.Cells[row, 10].Value = item.c[2];
-                                        workSheet.Cells[row, 11].Value = item.c[3];
-                                        workSheet.Cells[row, 12].Value = item.c[4];
-                                        workSheet.Cells[row, 13].Value = item.c[5];
-                                        workSheet.Cells[row, 14].Value = item.c[6];
-                                        workSheet.Cells[row, 15].Value = item.c[7];
-                                        workSheet.Cells[row, 16].Value = item.c[8];
-                                        workSheet.Cells[row, 17].Value = item.c[9];
-                                        workSheet.Cells[row, 18].Value = item.c[10];
-                                        workSheet.Cells[row, 19].Value = item.c[11];
-                                        workSheet.Cells[row, 20].Value = item.c[12];*/
                                     }
-
-                                    //  r.AppendLine(String.Format("Статья {0} внесена в отчет", item.id));
 
                                     items.Remove(item);
                                     break;
@@ -350,6 +352,25 @@ namespace Converter
         {
             Form3 f = new Form3();
             f.ShowDialog(this);
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            File.WriteAllText(SetupFileName, JsonConvert.SerializeObject(setup, Formatting.Indented));
+        }
+
+        private void comDistrict_TextChanged(object sender, EventArgs e)
+        {
+            setup.District = comDistrict.Text;
+        }
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void видеоИнструкцииToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://www.youtube.com/channel/UCfsezwUlKm_BAoHoz9uGH1A?view_as=subscriber");
         }
     }
 }

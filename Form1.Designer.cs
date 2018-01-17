@@ -45,6 +45,9 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolFileName = new System.Windows.Forms.ToolStripStatusLabel();
             this.rt = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.comDistrict = new System.Windows.Forms.ComboBox();
+            this.видеоИнструкцииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -126,7 +129,8 @@
             this.справкаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.оПрограммеToolStripMenuItem,
             this.toolStripMenuItem4,
-            this.инструкцияToolStripMenuItem});
+            this.инструкцияToolStripMenuItem,
+            this.видеоИнструкцииToolStripMenuItem});
             this.справкаToolStripMenuItem.Name = "справкаToolStripMenuItem";
             this.справкаToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
             this.справкаToolStripMenuItem.Text = "Справ&ка";
@@ -147,7 +151,7 @@
             // 
             this.инструкцияToolStripMenuItem.Name = "инструкцияToolStripMenuItem";
             this.инструкцияToolStripMenuItem.Size = new System.Drawing.Size(310, 22);
-            this.инструкцияToolStripMenuItem.Text = "Инструкция";
+            this.инструкцияToolStripMenuItem.Text = "Порядок работы";
             this.инструкцияToolStripMenuItem.Click += new System.EventHandler(this.инструкцияToolStripMenuItem_Click);
             // 
             // statusStrip1
@@ -170,20 +174,47 @@
             this.rt.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.rt.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.rt.Location = new System.Drawing.Point(12, 37);
+            this.rt.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.75F);
+            this.rt.Location = new System.Drawing.Point(12, 70);
             this.rt.Multiline = true;
             this.rt.Name = "rt";
             this.rt.ReadOnly = true;
             this.rt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.rt.Size = new System.Drawing.Size(588, 391);
+            this.rt.Size = new System.Drawing.Size(588, 358);
             this.rt.TabIndex = 2;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(13, 35);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(38, 13);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Район";
+            // 
+            // comDistrict
+            // 
+            this.comDistrict.FormattingEnabled = true;
+            this.comDistrict.Location = new System.Drawing.Point(68, 32);
+            this.comDistrict.Name = "comDistrict";
+            this.comDistrict.Size = new System.Drawing.Size(80, 21);
+            this.comDistrict.TabIndex = 5;
+            this.comDistrict.TextChanged += new System.EventHandler(this.comDistrict_TextChanged);
+            // 
+            // видеоИнструкцииToolStripMenuItem
+            // 
+            this.видеоИнструкцииToolStripMenuItem.Name = "видеоИнструкцииToolStripMenuItem";
+            this.видеоИнструкцииToolStripMenuItem.Size = new System.Drawing.Size(310, 22);
+            this.видеоИнструкцииToolStripMenuItem.Text = "Видео инструкции";
+            this.видеоИнструкцииToolStripMenuItem.Click += new System.EventHandler(this.видеоИнструкцииToolStripMenuItem_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(612, 469);
+            this.Controls.Add(this.comDistrict);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.rt);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
@@ -192,6 +223,7 @@
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Конвертер отчетности СКР - RnDSoft";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
@@ -219,6 +251,9 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem закрытьToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem форма713ToolStripMenuItem;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox comDistrict;
+        private System.Windows.Forms.ToolStripMenuItem видеоИнструкцииToolStripMenuItem;
     }
 }
 
