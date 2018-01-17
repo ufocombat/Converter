@@ -259,10 +259,22 @@ namespace Converter
                 ExcelFileName = DirReports + String.Format("\\{0}_713.xlsx", Normal(i++));
             } while (File.Exists(ExcelFileName));
 
-            File.Copy(DirForms + "\\713.xlsx", ExcelFileName);
+            try
+            {
+                File.Copy(DirForms + "\\713.xlsx", ExcelFileName);
+            }
+            catch
+            {
+                MessageBox.Show(String.Format("Не удалось открыть файл шаблона формы. Поместите файл 713.xls в подкаталог {0}. Если файл открыт в другой программе закройте ее.", DirForms));
+
+                modeFile.Enabled = false;
+                return;
+            }
+
             //DisplayInExcel();
 
             var excelApp = new Excel.Application();
+            
             excelApp.Visible = true;
             excelApp.Workbooks.Open(ExcelFileName);
             Excel._Worksheet workSheet = (Excel.Worksheet)excelApp.ActiveSheet;
