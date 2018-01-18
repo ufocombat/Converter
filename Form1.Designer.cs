@@ -32,7 +32,6 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.modeFile = new System.Windows.Forms.ToolStripMenuItem();
             this.OpenKRSP = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.закрытьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.настройкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.форма713ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -42,12 +41,13 @@
             this.оПрограммеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.инструкцияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.видеоИнструкцииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolFileName = new System.Windows.Forms.ToolStripStatusLabel();
             this.rt = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.comDistrict = new System.Windows.Forms.ComboBox();
-            this.видеоИнструкцииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -67,8 +67,8 @@
             // 
             this.modeFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.OpenKRSP,
-            this.toolStripMenuItem1,
             this.закрытьToolStripMenuItem,
+            this.toolStripMenuItem1,
             this.настройкаToolStripMenuItem,
             this.toolStripMenuItem3,
             this.ExitToolStripMenuItem});
@@ -84,16 +84,11 @@
             this.OpenKRSP.Text = "&Открыть файл книги РСП";
             this.OpenKRSP.Click += new System.EventHandler(this.OpenKRSP_Click);
             // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(255, 6);
-            // 
             // закрытьToolStripMenuItem
             // 
             this.закрытьToolStripMenuItem.Name = "закрытьToolStripMenuItem";
             this.закрытьToolStripMenuItem.Size = new System.Drawing.Size(258, 22);
-            this.закрытьToolStripMenuItem.Text = "Закрыть";
+            this.закрытьToolStripMenuItem.Text = "Закрыть файл книги РСП";
             this.закрытьToolStripMenuItem.Click += new System.EventHandler(this.закрытьToolStripMenuItem_Click);
             // 
             // настройкаToolStripMenuItem
@@ -107,7 +102,7 @@
             // форма713ToolStripMenuItem
             // 
             this.форма713ToolStripMenuItem.Name = "форма713ToolStripMenuItem";
-            this.форма713ToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.форма713ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.форма713ToolStripMenuItem.Text = "Форма 713";
             this.форма713ToolStripMenuItem.Click += new System.EventHandler(this.форма713ToolStripMenuItem_Click);
             // 
@@ -153,6 +148,13 @@
             this.инструкцияToolStripMenuItem.Size = new System.Drawing.Size(310, 22);
             this.инструкцияToolStripMenuItem.Text = "Порядок работы";
             this.инструкцияToolStripMenuItem.Click += new System.EventHandler(this.инструкцияToolStripMenuItem_Click);
+            // 
+            // видеоИнструкцииToolStripMenuItem
+            // 
+            this.видеоИнструкцииToolStripMenuItem.Name = "видеоИнструкцииToolStripMenuItem";
+            this.видеоИнструкцииToolStripMenuItem.Size = new System.Drawing.Size(310, 22);
+            this.видеоИнструкцииToolStripMenuItem.Text = "Видео инструкции";
+            this.видеоИнструкцииToolStripMenuItem.Click += new System.EventHandler(this.видеоИнструкцииToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -201,12 +203,10 @@
             this.comDistrict.TabIndex = 5;
             this.comDistrict.TextChanged += new System.EventHandler(this.comDistrict_TextChanged);
             // 
-            // видеоИнструкцииToolStripMenuItem
+            // toolStripMenuItem1
             // 
-            this.видеоИнструкцииToolStripMenuItem.Name = "видеоИнструкцииToolStripMenuItem";
-            this.видеоИнструкцииToolStripMenuItem.Size = new System.Drawing.Size(310, 22);
-            this.видеоИнструкцииToolStripMenuItem.Text = "Видео инструкции";
-            this.видеоИнструкцииToolStripMenuItem.Click += new System.EventHandler(this.видеоИнструкцииToolStripMenuItem_Click);
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(255, 6);
             // 
             // Form1
             // 
@@ -248,12 +248,12 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
         private System.Windows.Forms.ToolStripMenuItem настройкаToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem закрытьToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem форма713ToolStripMenuItem;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comDistrict;
         private System.Windows.Forms.ToolStripMenuItem видеоИнструкцииToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
     }
 }
 
